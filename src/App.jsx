@@ -49,7 +49,7 @@ const useFocusTrap = (isActive) => {
 // --- Utilities ---
 
 const GrainOverlay = () => (
-  <div className="pointer-events-none fixed inset-0 z-[9999] opacity-[0.03] mix-blend-overlay">
+  <div className="pointer-events-none hidden fixed inset-0 z-[9999] opacity-[0.03] mix-blend-overlay">
     <svg className="h-full w-full">
       <filter id="noiseFilter">
         <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch" />
@@ -91,7 +91,7 @@ const GridPattern = ({ width = 40, height = 40, className, mouseX, mouseY, isDar
   )
 };
 
-const Fireflies = ({ count = 50, opacity = 0.8 }) => {
+const Fireflies = ({ count = 30, opacity = 0.7 }) => {
   const fireflies = useMemo(() => Array.from({ length: count }).map(() => ({
     left: Math.random() * 100 + '%',
     top: Math.random() * 100 + '%',
