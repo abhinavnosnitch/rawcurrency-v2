@@ -1493,10 +1493,26 @@ const StrategyModal = ({ isOpen, onClose, isDark, onNavigateToAudit }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSuccess(true);
-    }, 1500);
+
+    const formData = new FormData(e.target);
+
+    fetch("https://formsubmit.co/ajax/abhinavnosnitch@gmail.com", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(Object.fromEntries(formData))
+    })
+      .then(response => response.json())
+      .then(data => {
+        setIsSubmitting(false);
+        setIsSuccess(true);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        setIsSubmitting(false);
+      });
   };
 
   if (!isOpen) return null;
@@ -1541,107 +1557,115 @@ const StrategyModal = ({ isOpen, onClose, isDark, onNavigateToAudit }) => {
                 This is not a generic call. We require context to ensure the conversation is useful.
               </p>
 
-              <form
-                action="https://formsubmit.co/abhinavnosnitch@gmail.com"
-                method="POST"
-                className="space-y-4"
-              >
-                {/* Required hidden fields */}
-                <input type="hidden" name="_subject" value="New Strategy Request" />
-                <input type="hidden" name="form_type" value="Big Strategy Form" />
-                <input type="hidden" name="_captcha" value="false" />
-                <input type="hidden" name="_template" value="table" />
-                {/* Optional thank you page can be added here if needed */}
-                {/* <input type="hidden" name="_next" value="..." /> */}
+              {isSuccess ? (
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                  <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 ${isDark ? "bg-emerald-500/10 text-emerald-500" : "bg-emerald-100 text-emerald-600"}`}>
+                    <Check size={32} />
+                  </div>
+                  <h3 className={`text-xl font-bold mb-2 ${isDark ? "text-white" : "text-zinc-900"}`}>Request Received</h3>
+                  <p className={`text-sm ${isDark ? "text-zinc-400" : "text-zinc-600"}`}>We'll be in touch shortly.</p>
+                </div>
+              ) : (
+                <form
+                  onSubmit={handleSubmit}
+                  className="space-y-4"
+                >
+                  {/* Required hidden fields */}
+                  <input type="hidden" name="_subject" value="New Strategy Request" />
+                  <input type="hidden" name="form_type" value="Big Strategy Form" />
+                  <input type="hidden" name="_captcha" value="false" />
+                  <input type="hidden" name="_template" value="table" />
 
-                <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-mono font-semibold text-zinc-500 uppercase tracking-wider">Full Name</label>
+                      <input
+                        type="text"
+                        name="Full Name"
+                        placeholder="Full Name"
+                        required
+                        className={`w-full px-4 py-3 border rounded-lg text-sm placeholder-zinc-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "bg-zinc-950 border-white/10 text-white" : "bg-zinc-50 border-zinc-200 text-zinc-900"}`}
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-mono font-semibold text-zinc-500 uppercase tracking-wider">Business Name</label>
+                      <input
+                        type="text"
+                        name="Business Name"
+                        placeholder="Business Name"
+                        required
+                        className={`w-full px-4 py-3 border rounded-lg text-sm placeholder-zinc-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "bg-zinc-950 border-white/10 text-white" : "bg-zinc-50 border-zinc-200 text-zinc-900"}`}
+                      />
+                    </div>
+                  </div>
+
                   <div className="space-y-1">
-                    <label className="text-[10px] font-mono font-semibold text-zinc-500 uppercase tracking-wider">Full Name</label>
+                    <label className="text-[10px] font-mono font-semibold text-zinc-500 uppercase tracking-wider">Your Position</label>
                     <input
                       type="text"
-                      name="Full Name"
-                      placeholder="Full Name"
+                      name="Position"
+                      placeholder="Your Position"
                       required
                       className={`w-full px-4 py-3 border rounded-lg text-sm placeholder-zinc-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "bg-zinc-950 border-white/10 text-white" : "bg-zinc-50 border-zinc-200 text-zinc-900"}`}
                     />
                   </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-mono font-semibold text-zinc-500 uppercase tracking-wider">Email Address</label>
+                      <input
+                        type="email"
+                        name="Email"
+                        placeholder="Email Address"
+                        required
+                        className={`w-full px-4 py-3 border rounded-lg text-sm placeholder-zinc-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "bg-zinc-950 border-white/10 text-white" : "bg-zinc-50 border-zinc-200 text-zinc-900"}`}
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-mono font-semibold text-zinc-500 uppercase tracking-wider">Contact Number (Optional)</label>
+                      <input
+                        type="tel"
+                        name="Contact Number"
+                        placeholder="Contact Number (optional)"
+                        className={`w-full px-4 py-3 border rounded-lg text-sm placeholder-zinc-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "bg-zinc-950 border-white/10 text-white" : "bg-zinc-50 border-zinc-200 text-zinc-900"}`}
+                      />
+                    </div>
+                  </div>
+
                   <div className="space-y-1">
-                    <label className="text-[10px] font-mono font-semibold text-zinc-500 uppercase tracking-wider">Business Name</label>
-                    <input
-                      type="text"
-                      name="Business Name"
-                      placeholder="Business Name"
+                    <label className="text-[10px] font-mono font-semibold text-zinc-500 uppercase tracking-wider">Current Bottlenecks / Breakdowns</label>
+                    <textarea
+                      name="Current Bottlenecks / Breakdowns"
+                      placeholder="Current Bottlenecks / Breakdowns"
+                      rows={4}
                       required
                       className={`w-full px-4 py-3 border rounded-lg text-sm placeholder-zinc-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "bg-zinc-950 border-white/10 text-white" : "bg-zinc-50 border-zinc-200 text-zinc-900"}`}
                     />
                   </div>
-                </div>
 
-                <div className="space-y-1">
-                  <label className="text-[10px] font-mono font-semibold text-zinc-500 uppercase tracking-wider">Your Position</label>
-                  <input
-                    type="text"
-                    name="Position"
-                    placeholder="Your Position"
-                    required
-                    className={`w-full px-4 py-3 border rounded-lg text-sm placeholder-zinc-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "bg-zinc-950 border-white/10 text-white" : "bg-zinc-50 border-zinc-200 text-zinc-900"}`}
-                  />
-                </div>
+                  <div className="pt-4 space-y-3">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className={`w-full py-3 rounded-lg font-semibold text-lg transition-all shadow-lg hover:shadow-white/20 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed ${isDark ? "bg-zinc-300 text-black hover:bg-zinc-200" : "bg-zinc-500 text-white hover:bg-zinc-600"}`}
+                    >
+                      {isSubmitting ? "Sending..." : "Request a Conversation"}
+                    </button>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-mono font-semibold text-zinc-500 uppercase tracking-wider">Email Address</label>
-                    <input
-                      type="email"
-                      name="Email"
-                      placeholder="Email Address"
-                      required
-                      className={`w-full px-4 py-3 border rounded-lg text-sm placeholder-zinc-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "bg-zinc-950 border-white/10 text-white" : "bg-zinc-50 border-zinc-200 text-zinc-900"}`}
-                    />
+                    <button
+                      type="button"
+                      onClick={() => { onClose(); onNavigateToAudit(); }}
+                      className={`w-full py-3 text-sm font-medium transition-colors border rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 ${isDark ? "border-zinc-800 text-zinc-400" : "border-zinc-200 text-zinc-500"}`}
+                    >
+                      Go to the audit for an in-depth diagnosis
+                    </button>
+
+                    <p className={`text-[10px] text-center ${isDark ? "text-zinc-600" : "text-zinc-400"}`}>
+                      Submitting does not guarantee a call. We review context before confirming next steps.
+                    </p>
                   </div>
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-mono font-semibold text-zinc-500 uppercase tracking-wider">Contact Number (Optional)</label>
-                    <input
-                      type="tel"
-                      name="Contact Number"
-                      placeholder="Contact Number (optional)"
-                      className={`w-full px-4 py-3 border rounded-lg text-sm placeholder-zinc-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "bg-zinc-950 border-white/10 text-white" : "bg-zinc-50 border-zinc-200 text-zinc-900"}`}
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-[10px] font-mono font-semibold text-zinc-500 uppercase tracking-wider">Current Bottlenecks / Breakdowns</label>
-                  <textarea
-                    name="Current Bottlenecks / Breakdowns"
-                    placeholder="Current Bottlenecks / Breakdowns"
-                    rows={4}
-                    required
-                    className={`w-full px-4 py-3 border rounded-lg text-sm placeholder-zinc-500 focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "bg-zinc-950 border-white/10 text-white" : "bg-zinc-50 border-zinc-200 text-zinc-900"}`}
-                  />
-                </div>
-
-                <div className="pt-4 space-y-3">
-                  <button
-                    type="submit"
-                    className={`w-full py-3 rounded-lg font-semibold text-lg transition-all shadow-lg hover:shadow-white/20 active:scale-[0.98] ${isDark ? "bg-zinc-300 text-black hover:bg-zinc-200" : "bg-zinc-500 text-white hover:bg-zinc-600"}`}
-                  >
-                    Request a Conversation
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => { onClose(); onNavigateToAudit(); }}
-                    className={`w-full py-3 text-sm font-medium transition-colors border rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 ${isDark ? "border-zinc-800 text-zinc-400" : "border-zinc-200 text-zinc-500"}`}
-                  >
-                    Go to the audit for an in-depth diagnosis
-                  </button>
-
-                  <p className={`text-[10px] text-center ${isDark ? "text-zinc-600" : "text-zinc-400"}`}>
-                    Submitting does not guarantee a call. We review context before confirming next steps.
-                  </p>
-                </div>
-              </form>
+                </form>
+              )}
             </div>
           </motion.div>
         </motion.div>
@@ -1651,6 +1675,33 @@ const StrategyModal = ({ isOpen, onClose, isDark, onNavigateToAudit }) => {
 };
 
 const GrowthAuditPage = ({ isDark, onOpenStrategyModal }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    const formData = new FormData(e.target);
+
+    fetch("https://formsubmit.co/ajax/abhinavnosnitch@gmail.com", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(Object.fromEntries(formData))
+    })
+      .then(response => response.json())
+      .then(data => {
+        setIsSubmitting(false);
+        setIsSuccess(true);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        setIsSubmitting(false);
+      });
+  };
 
   const scrollToForm = () => {
     document.getElementById('system-overview')?.scrollIntoView({ behavior: 'smooth' });
@@ -1885,123 +1936,140 @@ const GrowthAuditPage = ({ isDark, onOpenStrategyModal }) => {
             </div>
 
             <div className={`p-8 md:p-12 rounded-3xl border shadow-2xl ${isDark ? "bg-zinc-900 border-white/10" : "bg-white border-zinc-200"}`}>
-              <form
-                className="space-y-12"
-                action="https://formsubmit.co/abhinavnosnitch@gmail.com"
-                method="POST"
-              >
-                {/* Hidden Fields */}
-                <input type="hidden" name="_subject" value="New Growth Audit Intake" />
-                <input type="hidden" name="form_type" value="Comprehensive Audit Intake" />
-                <input type="hidden" name="_captcha" value="false" />
-                <input type="hidden" name="_template" value="table" />
-
-                {/* Identity */}
-                <div>
-                  <h3 className={`text-sm font-mono uppercase tracking-widest mb-8 ${isDark ? "text-zinc-500" : "text-zinc-400"}`}>// 01. IDENTITY</h3>
-                  <div className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className={`text-xs font-bold uppercase tracking-wide ${isDark ? "text-zinc-400" : "text-zinc-500"}`}>Full Name</label>
-                        <input type="text" name="Full Name" required className={`w-full px-4 py-3 rounded-xl border bg-transparent focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "border-zinc-800 text-white placeholder-zinc-600" : "border-zinc-300 text-zinc-900 placeholder-zinc-400"}`} placeholder="John Doe" />
-                      </div>
-                      <div className="space-y-2">
-                        <label className={`text-xs font-bold uppercase tracking-wide ${isDark ? "text-zinc-400" : "text-zinc-500"}`}>Business Name</label>
-                        <input type="text" name="Business Name" required className={`w-full px-4 py-3 rounded-xl border bg-transparent focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "border-zinc-800 text-white placeholder-zinc-600" : "border-zinc-300 text-zinc-900 placeholder-zinc-400"}`} placeholder="Acme Inc." />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className={`text-xs font-bold uppercase tracking-wide ${isDark ? "text-zinc-400" : "text-zinc-500"}`}>Your Role in the Business</label>
-                        <input type="text" name="Role" required className={`w-full px-4 py-3 rounded-xl border bg-transparent focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "border-zinc-800 text-white placeholder-zinc-600" : "border-zinc-300 text-zinc-900 placeholder-zinc-400"}`} placeholder="Founder, CEO, Growth Head..." />
-                      </div>
-                      <div className="space-y-2">
-                        <label className={`text-xs font-bold uppercase tracking-wide ${isDark ? "text-zinc-400" : "text-zinc-500"}`}>Email Address</label>
-                        <input type="email" name="Email" required className={`w-full px-4 py-3 rounded-xl border bg-transparent focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "border-zinc-800 text-white placeholder-zinc-600" : "border-zinc-300 text-zinc-900 placeholder-zinc-400"}`} placeholder="john@acme.com" />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <label className={`text-xs font-bold uppercase tracking-wide ${isDark ? "text-zinc-400" : "text-zinc-500"}`}>Primary Business Model</label>
-                      <select name="Business Model" required className={`w-full px-4 py-3 rounded-xl border bg-transparent focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "border-zinc-800 text-white bg-zinc-900" : "border-zinc-300 text-zinc-900 bg-white"}`}>
-                        <option value="" disabled selected>Select Model...</option>
-                        <option value="coach">Coach</option>
-                        <option value="consultant">Consultant</option>
-                        <option value="creator">Creator</option>
-                        <option value="service">Service Business</option>
-                        <option value="other">Other</option>
-                      </select>
-                    </div>
+              {isSuccess ? (
+                <div className="p-12 text-center">
+                  <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 ${isDark ? "bg-emerald-500/10 text-emerald-500" : "bg-emerald-100 text-emerald-600"}`}>
+                    <Check size={40} />
                   </div>
-                </div>
-
-                <div className={`h-px w-full ${isDark ? "bg-zinc-800" : "bg-zinc-200"}`} />
-
-                {/* Questions */}
-                <div>
-                  <h3 className={`text-sm font-mono uppercase tracking-widest mb-8 ${isDark ? "text-zinc-500" : "text-zinc-400"}`}>// 02. DIAGNOSTICS</h3>
-                  <div className="space-y-8">
-                    <div className="space-y-3">
-                      <label className={`text-sm font-bold ${isDark ? "text-zinc-200" : "text-zinc-800"}`}>What are you primarily trying to improve right now?</label>
-                      <div className={`text-xs mb-2 ${isDark ? "text-zinc-500" : "text-zinc-500"}`}>Booked calls, lead quality, consistency, conversion, system reliability, or something else.</div>
-                      <textarea name="Goal" rows={3} className={`w-full px-4 py-3 rounded-xl border bg-transparent focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "border-zinc-800 text-white placeholder-zinc-600" : "border-zinc-300 text-zinc-900 placeholder-zinc-400"}`} placeholder="Describe your main objective..." />
-                    </div>
-
-                    <div className="space-y-3">
-                      <label className={`text-sm font-bold ${isDark ? "text-zinc-200" : "text-zinc-800"}`}>Where does attention currently come from?</label>
-                      <div className={`text-xs mb-2 ${isDark ? "text-zinc-500" : "text-zinc-500"}`}>Paid ads, organic social, referrals, search, email, partnerships, or no consistent source yet.</div>
-                      <textarea name="Traffic Sources" rows={3} className={`w-full px-4 py-3 rounded-xl border bg-transparent focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "border-zinc-800 text-white placeholder-zinc-600" : "border-zinc-300 text-zinc-900 placeholder-zinc-400"}`} placeholder="List your traffic sources..." />
-                    </div>
-
-                    <div className="space-y-3">
-                      <label className={`text-sm font-bold ${isDark ? "text-zinc-200" : "text-zinc-800"}`}>Walk us through what happens from first click or inquiry to booked call.</label>
-                      <div className={`text-xs mb-2 ${isDark ? "text-zinc-500" : "text-zinc-500"}`}>Be specific. Include pages, follow-ups, tools, and handoffs if possible.</div>
-                      <textarea name="Funnel Steps" rows={4} className={`w-full px-4 py-3 rounded-xl border bg-transparent focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "border-zinc-800 text-white placeholder-zinc-600" : "border-zinc-300 text-zinc-900 placeholder-zinc-400"}`} placeholder="Step-by-step process..." />
-                    </div>
-
-                    <div className="space-y-3">
-                      <label className={`text-sm font-bold ${isDark ? "text-zinc-200" : "text-zinc-800"}`}>What feels most broken, fragile, or frustrating in your current setup?</label>
-                      <div className={`text-xs mb-2 ${isDark ? "text-zinc-500" : "text-zinc-500"}`}>Leaks, wasted spend, poor lead quality, tech issues, vendor overlap, lack of ownership.</div>
-                      <textarea name="Pain Points" rows={3} className={`w-full px-4 py-3 rounded-xl border bg-transparent focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "border-zinc-800 text-white placeholder-zinc-600" : "border-zinc-300 text-zinc-900 placeholder-zinc-400"}`} placeholder="Key pain points..." />
-                    </div>
-
-                    <div className="space-y-3">
-                      <label className={`text-sm font-bold ${isDark ? "text-zinc-200" : "text-zinc-800"}`}>Why are you looking at this now instead of later?</label>
-                      <div className={`text-xs mb-2 ${isDark ? "text-zinc-500" : "text-zinc-500"}`}>What changed? What pressure are you feeling? What prompted this review?</div>
-                      <textarea name="Why Now" rows={3} className={`w-full px-4 py-3 rounded-xl border bg-transparent focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "border-zinc-800 text-white placeholder-zinc-600" : "border-zinc-300 text-zinc-900 placeholder-zinc-400"}`} placeholder="Context on timing..." />
-                    </div>
-                  </div>
-                </div>
-
-                <div className={`h-px w-full ${isDark ? "bg-zinc-800" : "bg-zinc-200"}`} />
-
-                {/* Submission */}
-                <div className="pt-4">
-                  <div className={`p-4 rounded-xl mb-8 flex gap-4 ${isDark ? "bg-emerald-900/10 border border-emerald-500/20" : "bg-emerald-50 border border-emerald-200"}`}>
-                    <ShieldCheck className="text-emerald-500 shrink-0" size={20} />
-                    <p className={`text-xs leading-relaxed ${isDark ? "text-emerald-200" : "text-emerald-800"}`}>
-                      <strong>Confidentiality Protocol:</strong> Your system data is encrypted and reviewed only by senior architects. We do not share logic with competitors.
-                    </p>
-                  </div>
-
+                  <h3 className={`text-2xl font-bold mb-4 ${isDark ? "text-white" : "text-zinc-900"}`}>Audit Request Received</h3>
+                  <p className={`text-lg mb-8 max-w-lg mx-auto ${isDark ? "text-zinc-400" : "text-zinc-600"}`}>
+                    Thank you for providing those details. Your input has been securely logged. We will review your context and reach out shortly if we see a fit.
+                  </p>
                   <button
-                    type="submit"
-                    className={`w-full py-4 text-lg font-semibold rounded-xl transition-all shadow-xl hover:shadow-white/20 active:scale-[0.98] ${isDark ? "bg-zinc-300 text-black hover:bg-zinc-200" : "bg-zinc-500 text-white hover:bg-zinc-600"}`}
+                    onClick={onOpenStrategyModal}
+                    className={`text-sm font-medium hover:text-emerald-500 transition-colors ${isDark ? "text-zinc-500" : "text-zinc-600"}`}
                   >
-                    Submit for Review
+                    Have more to add? <span className="underline decoration-zinc-700">Request a Call</span>
                   </button>
-
-                  <div className="mt-8 text-center space-y-4">
-                    <p className={`text-xs ${isDark ? "text-zinc-500" : "text-zinc-400"}`}>
-                      Limited audit slots available per week.
-                    </p>
-                    <button onClick={onOpenStrategyModal} className={`text-sm font-medium hover:text-emerald-500 transition-colors ${isDark ? "text-zinc-400" : "text-zinc-500"}`}>
-                      Prefer to skip the audit? <span className="underline decoration-zinc-700">Request a Direct Strategy Call</span>
-                    </button>
-                  </div>
                 </div>
+              ) : (
+                <form
+                  className="space-y-12"
+                  onSubmit={handleSubmit}
+                >
+                  {/* Hidden Fields */}
+                  <input type="hidden" name="_subject" value="New Growth Audit Intake" />
+                  <input type="hidden" name="form_type" value="Comprehensive Audit Intake" />
+                  <input type="hidden" name="_captcha" value="false" />
+                  <input type="hidden" name="_template" value="table" />
 
-              </form>
-            </div>
+                  {/* Identity */}
+                  <div>
+                    <h3 className={`text-sm font-mono uppercase tracking-widest mb-8 ${isDark ? "text-zinc-500" : "text-zinc-400"}`}>// 01. IDENTITY</h3>
+                    <div className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <label className={`text-xs font-bold uppercase tracking-wide ${isDark ? "text-zinc-400" : "text-zinc-500"}`}>Full Name</label>
+                          <input type="text" name="Full Name" required className={`w-full px-4 py-3 rounded-xl border bg-transparent focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "border-zinc-800 text-white placeholder-zinc-600" : "border-zinc-300 text-zinc-900 placeholder-zinc-400"}`} placeholder="John Doe" />
+                        </div>
+                        <div className="space-y-2">
+                          <label className={`text-xs font-bold uppercase tracking-wide ${isDark ? "text-zinc-400" : "text-zinc-500"}`}>Business Name</label>
+                          <input type="text" name="Business Name" required className={`w-full px-4 py-3 rounded-xl border bg-transparent focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "border-zinc-800 text-white placeholder-zinc-600" : "border-zinc-300 text-zinc-900 placeholder-zinc-400"}`} placeholder="Acme Inc." />
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <label className={`text-xs font-bold uppercase tracking-wide ${isDark ? "text-zinc-400" : "text-zinc-500"}`}>Your Role in the Business</label>
+                          <input type="text" name="Role" required className={`w-full px-4 py-3 rounded-xl border bg-transparent focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "border-zinc-800 text-white placeholder-zinc-600" : "border-zinc-300 text-zinc-900 placeholder-zinc-400"}`} placeholder="Founder, CEO, Growth Head..." />
+                        </div>
+                        <div className="space-y-2">
+                          <label className={`text-xs font-bold uppercase tracking-wide ${isDark ? "text-zinc-400" : "text-zinc-500"}`}>Email Address</label>
+                          <input type="email" name="Email" required className={`w-full px-4 py-3 rounded-xl border bg-transparent focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "border-zinc-800 text-white placeholder-zinc-600" : "border-zinc-300 text-zinc-900 placeholder-zinc-400"}`} placeholder="john@acme.com" />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <label className={`text-xs font-bold uppercase tracking-wide ${isDark ? "text-zinc-400" : "text-zinc-500"}`}>Primary Business Model</label>
+                        <select name="Business Model" required className={`w-full px-4 py-3 rounded-xl border bg-transparent focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "border-zinc-800 text-white bg-zinc-900" : "border-zinc-300 text-zinc-900 bg-white"}`}>
+                          <option value="" disabled selected>Select Model...</option>
+                          <option value="coach">Coach</option>
+                          <option value="consultant">Consultant</option>
+                          <option value="creator">Creator</option>
+                          <option value="service">Service Business</option>
+                          <option value="other">Other</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={`h-px w-full ${isDark ? "bg-zinc-800" : "bg-zinc-200"}`} />
+
+                  {/* Questions */}
+                  <div>
+                    <h3 className={`text-sm font-mono uppercase tracking-widest mb-8 ${isDark ? "text-zinc-500" : "text-zinc-400"}`}>// 02. DIAGNOSTICS</h3>
+                    <div className="space-y-8">
+                      <div className="space-y-3">
+                        <label className={`text-sm font-bold ${isDark ? "text-zinc-200" : "text-zinc-800"}`}>What are you primarily trying to improve right now?</label>
+                        <div className={`text-xs mb-2 ${isDark ? "text-zinc-500" : "text-zinc-500"}`}>Booked calls, lead quality, consistency, conversion, system reliability, or something else.</div>
+                        <textarea name="Goal" rows={3} className={`w-full px-4 py-3 rounded-xl border bg-transparent focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "border-zinc-800 text-white placeholder-zinc-600" : "border-zinc-300 text-zinc-900 placeholder-zinc-400"}`} placeholder="Describe your main objective..." />
+                      </div>
+
+                      <div className="space-y-3">
+                        <label className={`text-sm font-bold ${isDark ? "text-zinc-200" : "text-zinc-800"}`}>Where does attention currently come from?</label>
+                        <div className={`text-xs mb-2 ${isDark ? "text-zinc-500" : "text-zinc-500"}`}>Paid ads, organic social, referrals, search, email, partnerships, or no consistent source yet.</div>
+                        <textarea name="Traffic Sources" rows={3} className={`w-full px-4 py-3 rounded-xl border bg-transparent focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "border-zinc-800 text-white placeholder-zinc-600" : "border-zinc-300 text-zinc-900 placeholder-zinc-400"}`} placeholder="List your traffic sources..." />
+                      </div>
+
+                      <div className="space-y-3">
+                        <label className={`text-sm font-bold ${isDark ? "text-zinc-200" : "text-zinc-800"}`}>Walk us through what happens from first click or inquiry to booked call.</label>
+                        <div className={`text-xs mb-2 ${isDark ? "text-zinc-500" : "text-zinc-500"}`}>Be specific. Include pages, follow-ups, tools, and handoffs if possible.</div>
+                        <textarea name="Funnel Steps" rows={4} className={`w-full px-4 py-3 rounded-xl border bg-transparent focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "border-zinc-800 text-white placeholder-zinc-600" : "border-zinc-300 text-zinc-900 placeholder-zinc-400"}`} placeholder="Step-by-step process..." />
+                      </div>
+
+                      <div className="space-y-3">
+                        <label className={`text-sm font-bold ${isDark ? "text-zinc-200" : "text-zinc-800"}`}>What feels most broken, fragile, or frustrating in your current setup?</label>
+                        <div className={`text-xs mb-2 ${isDark ? "text-zinc-500" : "text-zinc-500"}`}>Leaks, wasted spend, poor lead quality, tech issues, vendor overlap, lack of ownership.</div>
+                        <textarea name="Pain Points" rows={3} className={`w-full px-4 py-3 rounded-xl border bg-transparent focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "border-zinc-800 text-white placeholder-zinc-600" : "border-zinc-300 text-zinc-900 placeholder-zinc-400"}`} placeholder="Key pain points..." />
+                      </div>
+
+                      <div className="space-y-3">
+                        <label className={`text-sm font-bold ${isDark ? "text-zinc-200" : "text-zinc-800"}`}>Why are you looking at this now instead of later?</label>
+                        <div className={`text-xs mb-2 ${isDark ? "text-zinc-500" : "text-zinc-500"}`}>What changed? What pressure are you feeling? What prompted this review?</div>
+                        <textarea name="Why Now" rows={3} className={`w-full px-4 py-3 rounded-xl border bg-transparent focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition-all ${isDark ? "border-zinc-800 text-white placeholder-zinc-600" : "border-zinc-300 text-zinc-900 placeholder-zinc-400"}`} placeholder="Context on timing..." />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={`h-px w-full ${isDark ? "bg-zinc-800" : "bg-zinc-200"}`} />
+
+                  {/* Submission */}
+                  <div className="pt-4">
+                    <div className={`p-4 rounded-xl mb-8 flex gap-4 ${isDark ? "bg-emerald-900/10 border border-emerald-500/20" : "bg-emerald-50 border border-emerald-200"}`}>
+                      <ShieldCheck className="text-emerald-500 shrink-0" size={20} />
+                      <p className={`text-xs leading-relaxed ${isDark ? "text-emerald-200" : "text-emerald-800"}`}>
+                        <strong>Confidentiality Protocol:</strong> Your system data is encrypted and reviewed only by senior architects. We do not share logic with competitors.
+                      </p>
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className={`w-full py-4 text-lg font-semibold rounded-xl transition-all shadow-xl hover:shadow-white/20 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed ${isDark ? "bg-zinc-300 text-black hover:bg-zinc-200" : "bg-zinc-500 text-white hover:bg-zinc-600"}`}
+                    >
+                      {isSubmitting ? "Submitting securely..." : "Submit for Review"}
+                    </button>
+
+                    <div className="mt-8 text-center space-y-4">
+                      <p className={`text-xs ${isDark ? "text-zinc-500" : "text-zinc-400"}`}>
+                        Limited audit slots available per week.
+                      </p>
+                      <button type="button" onClick={onOpenStrategyModal} className={`text-sm font-medium hover:text-emerald-500 transition-colors ${isDark ? "text-zinc-400" : "text-zinc-500"}`}>
+                        Prefer to skip the audit? <span className="underline decoration-zinc-700">Request a Direct Strategy Call</span>
+                      </button>
+                    </div>
+                  </div>
+
+                </form>
+              )}</div>
           </RevealSection>
         </div>
       </section>
@@ -2372,6 +2440,11 @@ export default function App() {
   const [isStrategyModalOpen, setIsStrategyModalOpen] = useState(false);
   const [isDark, setIsDark] = useState(true);
   const [currentView, setCurrentView] = useState('home');
+
+  useEffect(() => {
+    document.body.style.backgroundColor = isDark ? '#000000' : '#ffffff';
+    document.body.style.transition = 'background-color 1200ms ease-in-out';
+  }, [isDark]);
 
   const toggleTheme = () => setIsDark(!isDark);
 
