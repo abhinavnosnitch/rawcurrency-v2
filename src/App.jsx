@@ -91,7 +91,7 @@ const GridPattern = ({ width = 40, height = 40, className, mouseX, mouseY, isDar
   )
 };
 
-const Fireflies = ({ count = 30, opacity = 0.7 }) => {
+const Fireflies = ({ count = 25, opacity = 0.5 }) => {
   const fireflies = useMemo(() => Array.from({ length: count }).map(() => ({
     left: Math.random() * 100 + '%',
     top: Math.random() * 100 + '%',
