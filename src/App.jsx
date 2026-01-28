@@ -49,7 +49,7 @@ const useFocusTrap = (isActive) => {
 // --- Utilities ---
 
 const GrainOverlay = () => (
-  <div className="pointer-events-none hidden fixed inset-0 z-[9999] opacity-[0.03] mix-blend-overlay">
+  <div className="pointer-events-none fixed inset-0 z-[9999] opacity-[0.03] mix-blend-overlay">
     <svg className="h-full w-full">
       <filter id="noiseFilter">
         <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch" />
@@ -91,12 +91,12 @@ const GridPattern = ({ width = 40, height = 40, className, mouseX, mouseY, isDar
   )
 };
 
-const Fireflies = ({ count = 15, opacity = 0.5 }) => {
+const Fireflies = ({ count = 50, opacity = 0.8 }) => {
   const fireflies = useMemo(() => Array.from({ length: count }).map(() => ({
     left: Math.random() * 100 + '%',
     top: Math.random() * 100 + '%',
     style: {
-      animation: `firefly-move ${Math.random() * 5 + 5}s infinite alternate ease-in-out ${Math.random() * 2}s`,
+      animation: `firefly-move ${Math.random() * 10 + 10}s infinite alternate ease-in-out ${Math.random() * 2}s`,
       // Add random slight scaling to make it feel more organic
       transform: `scale(${Math.random() * 0.5 + 0.5})`
     }
@@ -403,7 +403,7 @@ const Hero = ({ onOpenModal, isDark }) => {
 
         {showEffects && (
           <motion.div className="absolute inset-0 z-20" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.2 }}>
-            <Fireflies count={50} opacity={0.8} />
+            <Fireflies count={12} opacity={0.2} />
           </motion.div>
         )}
         <GridPattern

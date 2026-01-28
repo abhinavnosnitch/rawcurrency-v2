@@ -12,17 +12,17 @@
 
     20% {
         opacity: 0.8;
-        transform: scale(1) translate(10px, -10px);
+        transform: scale(1) translate(4px, -4px);
     }
 
     50% {
         opacity: 0.4;
-        transform: scale(0.8) translate(-15px, 20px);
+        transform: scale(0.8) translate(-6px, 8px);
     }
 
     80% {
         opacity: 0.8;
-        transform: scale(1) translate(20px, -20px);
+        transform: scale(1) translate(8px, -8px);
     }
 
     100% {
