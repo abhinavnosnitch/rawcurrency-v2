@@ -125,50 +125,6 @@ const Fireflies = ({ count = 50, opacity = 0.8 }) => {
   )
 };
 
-const Bubbles = ({ count = 50, opacity = 0.8 }) => {
-  const bubbleColors = [
-    "rgba(236, 72, 153, 0.4)",
-    "rgba(249, 115, 22, 0.4)"
-  ];
-
-  const bubbles = useMemo(() => Array.from({ length: count }).map(() => ({
-    left: Math.random() * 100 + '%',
-    top: Math.random() * 100 + '%',
-    size: Math.random() * 40 + 10,
-    duration: Math.random() * 10 + 8,
-    delay: Math.random() * 5,
-    scaleMax: Math.random() * 0.4 + 0.6
-  })), [count]);
-
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {bubbles.map((bubble, i) => (
-        <motion.div
-          key={i}
-          initial={{ left: bubble.left, top: bubble.top, opacity: 0, scale: 0 }}
-          animate={{
-            opacity: [0, opacity, 0],
-            scale: [0, bubble.scaleMax, 0],
-            x: [0, Math.random() * 100 - 50, 0],
-            y: [0, Math.random() * 100 - 50, 0]
-          }}
-          transition={{
-            duration: bubble.duration,
-            repeat: Infinity,
-            delay: bubble.delay,
-            ease: "easeInOut"
-          }}
-          style={{
-            width: bubble.size,
-            height: bubble.size,
-            borderColor: bubbleColors[i % bubbleColors.length]
-          }}
-          className="absolute rounded-full border bg-white/10 backdrop-blur-[2px] blur-[1px] shadow-sm"
-        />
-      ))}
-    </div>
-  )
-};
 
 const GlowButton = ({ children, onClick, className, primary = false, isDark = false, ...props }) => (
   <motion.button
@@ -452,14 +408,9 @@ const Hero = ({ onOpenModal, isDark }) => {
         </motion.div>
 
         {showEffects && (
-          <>
-            <motion.div className="absolute inset-0 z-20" initial={{ opacity: 0 }} animate={{ opacity: isDark ? 1 : 0 }} transition={{ duration: 1.2 }}>
-              <Fireflies count={50} opacity={0.8} />
-            </motion.div>
-            <motion.div className="absolute inset-0 z-20" initial={{ opacity: 0 }} animate={{ opacity: isDark ? 0 : 1 }} transition={{ duration: 1.2 }}>
-              <Bubbles count={30} opacity={0.6} />
-            </motion.div>
-          </>
+          <motion.div className="absolute inset-0 z-20" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.2 }}>
+            <Fireflies count={50} opacity={0.8} />
+          </motion.div>
         )}
         <GridPattern
           className={`absolute inset-0 z-30 opacity-30 transition-colors duration-[1200ms] ${isDark ? "text-zinc-700" : "text-zinc-400"}`}
