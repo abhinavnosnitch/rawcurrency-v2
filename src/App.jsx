@@ -95,30 +95,24 @@ const Fireflies = ({ count = 50, opacity = 0.8 }) => {
   const fireflies = useMemo(() => Array.from({ length: count }).map(() => ({
     left: Math.random() * 100 + '%',
     top: Math.random() * 100 + '%',
-    duration: Math.random() * 5 + 5,
-    delay: Math.random() * 2,
-    scaleMax: Math.random() * 0.5 + 0.5
+    style: {
+      animation: `firefly-move ${Math.random() * 5 + 5}s infinite alternate ease-in-out ${Math.random() * 2}s`,
+      // Add random slight scaling to make it feel more organic
+      transform: `scale(${Math.random() * 0.5 + 0.5})`
+    }
   })), [count]);
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {fireflies.map((firefly, i) => (
-        <motion.div
+        <div
           key={i}
-          initial={{ left: firefly.left, top: firefly.top, opacity: 0, scale: 0 }}
-          animate={{
-            opacity: [0, opacity, 0],
-            scale: [0, firefly.scaleMax, 0],
-            x: [0, Math.random() * 60 - 30, 0],
-            y: [0, Math.random() * 60 - 30, 0]
+          style={{
+            left: firefly.left,
+            top: firefly.top,
+            ...firefly.style
           }}
-          transition={{
-            duration: firefly.duration,
-            repeat: Infinity,
-            delay: firefly.delay,
-            ease: "easeInOut"
-          }}
-          className="absolute w-1.5 h-1.5 bg-yellow-400 rounded-full shadow-[0_0_12px_2px_rgba(250,204,21,0.4)]"
+          className="absolute w-1.5 h-1.5 bg-yellow-400 rounded-full shadow-[0_0_12px_2px_rgba(250,204,21,0.4)] opacity-0"
         />
       ))}
     </div>
