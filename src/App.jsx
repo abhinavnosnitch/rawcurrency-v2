@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence, useSpring, useMotionValue, useMotionTemplate } from 'framer-motion';
 import { Menu, X, ArrowRight, Check, Play, ExternalLink, Calendar, MessageSquare, ChevronRight, Zap, Globe, Layers, Cpu, Moon, Sun, Terminal, Code, Activity, GitBranch, Database, BarChart3, Lock, Shield, Search, PenTool, Rocket, ShieldCheck, TrendingUp, Target, Fingerprint, Lightbulb, UserCheck, UserX } from 'lucide-react';
+import { Analytics } from '@vercel/analytics/react';
 
 // --- Assets & Constants ---
 const HERO_DAY_URL = "https://res.cloudinary.com/doalvffjs/image/upload/v1769107605/hero-daytime_md8lbe.webp";
@@ -49,7 +50,7 @@ const useFocusTrap = (isActive) => {
 // --- Utilities ---
 
 const GrainOverlay = () => (
-  <div className="pointer-events-none fixed inset-0 z-[9999] opacity-[0.03] mix-blend-overlay">
+  <div className="pointer-events-none hidden fixed inset-0 z-[9999] opacity-[0.03] mix-blend-overlay">
     <svg className="h-full w-full">
       <filter id="noiseFilter">
         <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch" />
@@ -91,7 +92,7 @@ const GridPattern = ({ width = 40, height = 40, className, mouseX, mouseY, isDar
   )
 };
 
-const Fireflies = ({ count = 50, opacity = 0.8 }) => {
+const Fireflies = ({ count = 30, opacity = 0.6 }) => {
   const fireflies = useMemo(() => Array.from({ length: count }).map(() => ({
     left: Math.random() * 100 + '%',
     top: Math.random() * 100 + '%',
@@ -2611,6 +2612,7 @@ export default function App() {
       >
         <MessageSquare className="w-6 h-6" />
       </motion.button>
+      <Analytics />
     </div>
   );
 }
