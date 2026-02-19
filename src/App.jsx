@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence, useSpring, useMotionValue, useMotionTemplate } from 'framer-motion';
 import { Menu, X, ArrowRight, Check, Play, ExternalLink, Calendar, MessageSquare, ChevronRight, Zap, Globe, Layers, Cpu, Moon, Sun, Terminal, Code, Activity, GitBranch, Database, BarChart3, Lock, Shield, Search, PenTool, Rocket, ShieldCheck, TrendingUp, Target, Fingerprint, Lightbulb, UserCheck, UserX } from 'lucide-react';
+import { Analytics } from "@vercel/analytics/react";
 
 // --- Assets & Constants ---
 const HERO_DAY_URL = "https://res.cloudinary.com/doalvffjs/image/upload/v1769107605/hero-daytime_md8lbe.webp";
@@ -2611,6 +2612,7 @@ export default function App() {
       >
         <MessageSquare className="w-6 h-6" />
       </motion.button>
+      <Analytics />
     </div>
   );
 }
